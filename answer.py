@@ -1,5 +1,6 @@
+import os
 import time
-from transformers import AutoModelForQuestionAnswering, AutoTokenizer, pipeline
+from transformers import pipeline
 from flask import Flask
 from flask import request
 from flask import jsonify
@@ -189,6 +190,6 @@ def answer():
 # Run if running "python answer.py"
 if __name__ == '__main__':
     # Run our Flask app and start listening for requests!
-    app.run(host='0.0.0.0', port=8000, threaded=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), threaded=True)
 
 conn.close()
