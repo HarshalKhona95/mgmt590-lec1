@@ -100,7 +100,7 @@ def answer():
     (timestamp int, model varchar, answer varchar,question varchar,context varchar)""")
 
     if request.method == 'POST':
-        answermodel = request.args.get('model', None)
+        answermodel = request.args.get('model', default="distilled-bert")
         cursor.execute("SELECT DISTINCT name, tokenizer, model from Models WHERE name = ?", (answermodel,))
         temp = cursor.fetchall()
         name = temp[0][0]
@@ -127,28 +127,46 @@ def answer():
         conn = sqlite3.connect("pythonsqlite.db")
         cursor = conn.cursor()
 
-        modelname = request.args.get("model")
+        modelname = request.args.get("model", default=None)
         start = request.args.get("start")
         end = request.args.get("end")
 
-        c.execute("SELECT * FROM answer")
-        conn.commit()
-        model = c.fetchall()
-        listmodels = []
-        #Running Loops
-        for i in model:
-            output = {
-                "timestamp": i[0],
-                "modelname": i[4],
-                "answer": i[1],
-                "question": i[2],
-                "context": i[3],
-            }
-            listmodels.append(output)
-        conn.close()
-        return jsonify(listmodels)
+        if modelname is not None:
 
+            cursor.execute("SELECT * FROM QuesAns where model='" + modelname + "' and timestamp between ? and ?", [start, end])
+            conn.commit()
+            model = cursor.fetchall()
+            listmodels = []
+
+            for i in model:
+                output = {
+                    "timestamp": i[0],
+                    "modelname": i[4],
+                    "answer": i[1],
+                    "question": i[2],
+                    "context": i[3],
+                }
+                listmodels.append(output)
+        else:
+            cursor.execute("SELECT * FROM QuesAns where timestamp between ? and ? ", [start, end])
+            conn.commit()
+            model = cursor.fetchall()
+            listmodels = []
+
+            for i in model:
+                output = {
+                    "timestamp": i[0],
+                    "modelname": i[4],
+                    "answer": i[1],
+                    "question": i[2],
+                    "context": i[3],
+                }
+                listmodels.append(output)
+
+        conn.close()
+    return jsonify(listmodels)
 # Run if running "python answer.py"
+
 if __name__ == '__main__':
     # Run our Flask app and start listening for requests!
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), threaded=True)
