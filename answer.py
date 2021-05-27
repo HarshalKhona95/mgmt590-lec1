@@ -113,7 +113,12 @@ def answer():
         hg_comp = pipeline('question-answering', model=model, tokenizer=token)
         # Answer the answer
         answer = hg_comp({'question': data['question'], 'context': data['context']})['answer']
+
+        cursor.execute("INSERT INTO QuesAns VALUES (?, ?, ?, ?, ?)", (timestamp, answermodel, answer, data['question'], data['context']))
+        conn.commit()
+
         # Create the response body.
+
         output = {
             "model": answermodel,
             "timestamp": timestamp,
@@ -133,7 +138,7 @@ def answer():
 
         if modelname is not None:
 
-            cursor.execute("SELECT * FROM QuesAns where model='" + modelname + "' and timestamp between ? and ?", [start, end])
+            cursor.execute("SELECT * FROM QuesAns where model= ? and timestamp between ? and ?", (modelname, start, end))
             conn.commit()
             model = cursor.fetchall()
             listmodels = []
@@ -141,14 +146,14 @@ def answer():
             for i in model:
                 output = {
                     "timestamp": i[0],
-                    "modelname": i[4],
-                    "answer": i[1],
-                    "question": i[2],
-                    "context": i[3],
+                    "modelname": i[1],
+                    "answer": i[2],
+                    "question": i[3],
+                    "context": i[4],
                 }
                 listmodels.append(output)
         else:
-            cursor.execute("SELECT * FROM QuesAns where timestamp between ? and ? ", [start, end])
+            cursor.execute("SELECT * FROM QuesAns where timestamp between ? and ? ", (start, end))
             conn.commit()
             model = cursor.fetchall()
             listmodels = []
