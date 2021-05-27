@@ -92,46 +92,7 @@ def models():
         return jsonify(listmodels)
 
 
-@app.route("/answer", methods=["POST", "GET"])
-def answer():
-    conn = sqlite3.connect("pythonsqlite.db")
-    cursor = conn.cursor()
-    create_table = """CREATE TABLE IF NOT EXISTS QuesAns 
-    (timestamp int, answer varchar(100), question varchar(100), context varchar(1000), model varchar(100));"""
-    cursor.execute(create_table)
-    conn.commit()
-    conn.close()
-
-    if request.method == "POST":
-        conn = sqlite3.connect("pythonsqlite.db")
-        cursor = conn.cursor()
-        model_name = request.args.get('model')
-        cursor.execute("SELECT * from Models WHERE name = ?", (model_name,))
-        temp = cursor.fetchall()
-        name = temp[0][0]
-        token = temp[0][1]
-        model = temp[0][2]
-        data = request.json
-
-        ts = int(time.time())
-        # Import model
-        hg_comp = pipeline('question-answering', model=model, tokenizer=token)
-        # Answer the answer
-        answer = hg_comp({'question': data['question'], 'context': data['context']})['answer']
-        # Create the response body.
-        cursor.execute("INSERT INTO answer VALUES (?, ?, ?, ?, ?)", (ts, answer, data['question'], data['context'], model))
-        conn.commit()
-
-        out = {
-            "model": model_name,
-            "timestamp": ts,
-            "question": data['question'],
-            "context": data['context'],
-            "answer": answer
-        }
-        return jsonify(out)
-
-@app.route("/answer", methods=['GET', 'PUT', 'POST', 'DELETE'])
+@app.route("/answer", methods=['GET', 'POST'])
 def answer():
     conn = sqlite3.connect('pythonsqlite.db')
     cursor = conn.cursor()
