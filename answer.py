@@ -135,7 +135,7 @@ def answer():
         conn.commit()
         model = c.fetchall()
         listmodels = []
-
+        #Running Loops
         for i in model:
             output = {
                 "timestamp": i[0],
