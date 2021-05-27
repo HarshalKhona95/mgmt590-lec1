@@ -9,14 +9,18 @@ import torch
 
 conn = sqlite3.connect('pythonsqlite.db')
 cursor = conn.cursor()
-cursor.execute("DROP TABLE IF EXISTS models;")
+cursor.execute("DROP TABLE IF EXISTS Models;")
+conn.commit()
+cursor.execute("DROP TABLE IF EXISTS QuesAns;")
 conn.commit()
 
 #Creating table as per requirement
 sql = '''CREATE TABLE IF NOT EXISTS Models
         (name varchar(100), tokenizer varchar(100), model varchar(100));'''
 cursor.execute(sql)
-print("Table Created Successfully")
+cursor.execute("""CREATE TABLE IF NOT EXISTS QuesAns
+(timestamp int, model varchar, answer varchar,question varchar,context varchar)""")
+print("Tables Created Successfully")
 cursor.execute('''INSERT INTO Models VALUES("distilled-bert","distilbert-base-uncased-distilled-squad","distilbert-base-uncased-distilled-squad");''')
 cursor.execute('''INSERT INTO Models VALUES("deepset-roberta","deepset/roberta-base-squad2","deepset/roberta-base-squad2");''')
 conn.commit()
@@ -96,53 +100,55 @@ def models():
 def answer():
     conn = sqlite3.connect('pythonsqlite.db')
     cursor = conn.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS QuesAns
-    (timestamp int, model varchar, answer varchar,question varchar,context varchar)""")
 
-    if request.method == 'POST':
-        answermodel = request.args.get('model', default="distilled-bert")
-        cursor.execute("SELECT DISTINCT name, tokenizer, model from Models WHERE name = ?", (answermodel,))
-        temp = cursor.fetchall()
-        name = temp[0][0]
-        token = temp[0][1]
-        model = temp[0][2]
+    if request.method == "POST":
+        conn = sqlite3.connect("pythonsqlite.db")
+        c = conn.cursor()
+        model_name = request.args.get('model', default = "distilled-bert")
+        c.execute("SELECT * from Models WHERE name = ?", (model_name,))
+        models_table = c.fetchall()
+        print(models_table)
+        temp = models_table[0]
+        print(temp)
+        name = temp[0]
+        print(name)
+        token = temp[1]
+        print(token)
+        model = temp[2]
+        print(model)
         data = request.json
-
-        timestamp = int(time.time())
+        ts = int(time.time())
         # Import model
         hg_comp = pipeline('question-answering', model=model, tokenizer=token)
         # Answer the answer
         answer = hg_comp({'question': data['question'], 'context': data['context']})['answer']
-
-        cursor.execute("INSERT INTO QuesAns VALUES (?, ?, ?, ?, ?)", (timestamp, answermodel, answer, data['question'], data['context']))
-        conn.commit()
-
         # Create the response body.
 
-        output = {
-            "model": answermodel,
-            "timestamp": timestamp,
+        c.execute("INSERT INTO QuesAns VALUES (?, ?, ?, ?, ?)", (ts, model_name, answer, data['question'], data['context']))
+        conn.commit()
+
+        out = {
+            "model": model_name,
+            "timestamp": ts,
             "question": data['question'],
             "context": data['context'],
             "answer": answer
         }
-        return jsonify(output)
+        return jsonify(out)
 
     elif request.method == "GET":
+
         conn = sqlite3.connect("pythonsqlite.db")
         cursor = conn.cursor()
-
         modelname = request.args.get("model", default=None)
         start = request.args.get("start")
         end = request.args.get("end")
 
         if modelname is not None:
-
-            cursor.execute("SELECT * FROM QuesAns where model= ? and timestamp between ? and ?", (modelname, start, end))
+            cursor.execute("SELECT * FROM QuesAns where model='" + modelname + "' and timestamp between ? and ?", [start, end])
             conn.commit()
             model = cursor.fetchall()
             listmodels = []
-
             for i in model:
                 output = {
                     "timestamp": i[0],
@@ -153,25 +159,23 @@ def answer():
                 }
                 listmodels.append(output)
         else:
-            cursor.execute("SELECT * FROM QuesAns where timestamp between ? and ? ", (start, end))
+            cursor.execute("SELECT * FROM QuesAns where timestamp between ? and ?", (start, end))
             conn.commit()
             model = cursor.fetchall()
             listmodels = []
-
             for i in model:
                 output = {
                     "timestamp": i[0],
-                    "modelname": i[4],
-                    "answer": i[1],
-                    "question": i[2],
-                    "context": i[3],
+                    "modelname": i[1],
+                    "answer": i[2],
+                    "question": i[3],
+                    "context": i[4],
                 }
                 listmodels.append(output)
+            conn.close()
+        return jsonify(listmodels)
 
-        conn.close()
-    return jsonify(listmodels)
 # Run if running "python answer.py"
-
 if __name__ == '__main__':
     # Run our Flask app and start listening for requests!
     app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 8080)), threaded=True)
