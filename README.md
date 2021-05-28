@@ -15,7 +15,7 @@ The API used is a Question-Answering API which generates answers for the questio
 We have created multiple models and have added the functionality to add or delete models. We can choose any model which has been added in the database to answer the questions
 
 Of the several routes created, the first one (GET /models) helps us to get the list of all the available models
-### Route:   
+### Route 1 :   
   GET /models
   
 Response:
@@ -36,7 +36,7 @@ Response:
 
 The second route is used to add a new model to our existing database of models. The model details(model, model-name, tokenixer) of the model is extracted from request.json (Body)  
 
- ### Route: 
+ ### Route 2: 
   PUT /models
   
 Body (request.json):
@@ -70,7 +70,7 @@ Response:
 ```
   
 The third route is to delete models from our dataset. The model name which is to be deleted is extracted from the DELETE request and deletes it from the database
-### Route:   
+### Route 3:   
   DELETE /models?model=<model name>
   Example: DELETE /models?model=tiny-bert
  
@@ -96,13 +96,14 @@ We have provided an option for the user to choose any model to answer the partic
 By default, we have selected distilled-bert to answer the questions. The API uses the default model if no model is passed in the syntax.
 Additionally, a time-stamp is also added to maintain the record of all the questions answered in a new database which can be later fetched
 
-Route:   
+### Route 4:   
   POST /answer?model=<model name>
   Example: POST/answer
   Example: POST/answer?model=deepset-roberta
 
 Body (request.json):
-  {
+```
+ {
     "question": "who did holly matthews play in waterloo rd?",
     "context": "She attended the British drama school East 15 in 2005,
     and left after winning a high-profile role in the BBC drama Waterloo
@@ -111,16 +112,17 @@ Body (request.json):
     Whitfield; in ITV's The Bill playing drug addict Josie Clarke; and
     she was back in the BBC soap Doctors in 2009, playing Tansy Flack."
   }
- 
+ ```
 Response:
-  {
+```
+ {
     "answer": "Leigh-Ann Galloway",
     "context": "She attended the British drama school East 15 in 2005, and left after winning a high-profile role in the BBC drama Waterloo Road, playing the bully Leigh-Ann Galloway.[6] Since that role, Matthews has continued to act in BBC's Doctors, playing Connie Whitfield; in ITV's The Bill playing drug addict Josie Clarke; and she was back in the BBC soap Doctors in 2009, playing Tansy Flack.",
     "model": "distilled-bert",
     "question": "who did holly matthews play in waterloo rd?",
     "timestamp": 1622161059
   }
-
+```
 
 The fifth functionality is to fetch the entire database of the questions answered so far.
 It provides an option to select a specific model and know the details of its activity. In this case the name of model is extracted and activity of that model is returned. That is the question , context and answer along with time stamp of answering is returned. There is also option to select time frame . the start and the end time frame if selected, the API returns the records between that provided window. If there is no start and end time , API returns the records of all the instance wher a model was used to answetr a qyestion.In same way if the model name is not provided in request, the record for all models are returned.
