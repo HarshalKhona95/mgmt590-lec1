@@ -1,4 +1,4 @@
-# mgmt590-lec1
+# Production Scale Data Products - Assignment 2
 
 ## Functionalities of The Code
 
@@ -23,7 +23,8 @@ The API used is a Question-Answering API which generates answers for the questio
 <br>
 We have created multiple models and have added the functionality to add or delete models. We can choose any model which has been added in the database to answer the questions
 <br>
-Of the several routes created, the first one (GET /models) helps us to get the list of all the available models
+ <br>
+The First Route (GET /models) helps us to get the list of all the available models
 
  ### Route 1 :   
   GET /models
@@ -106,11 +107,14 @@ Response:
     }
   ]
  ``` 
-
+<br>
 The fourth route is to answer the questions based on the context provided for the particular question. The post request is used to extract the Question and Context from the body (request.json)
-We have provided an option for the user to choose any model to answer the particular question. The model will be fetched from our database of models.
-By default, we have selected distilled-bert to answer the questions. The API uses the default model if no model is passed in the syntax.
-Additionally, a time-stamp is also added to maintain the record of all the questions answered in a new database which can be later fetched
+<br>
+ We have provided an option for the user to choose any model to answer the particular question. The model will be fetched from our database of models.
+<br>
+ By default, we have selected distilled-bert to answer the questions. The API uses the default model if no model is passed in the syntax.
+<br>
+ Additionally, a time-stamp is also added to maintain the record of all the questions answered in a new database which can be later fetched
 
 ### Route 4:   
   POST /answer?model=<model name>
@@ -129,7 +133,8 @@ Body (request.json):
     she was back in the BBC soap Doctors in 2009, playing Tansy Flack."
   }
  ```
-Response:
+<br>
+ Response:
 ```
  {
     "answer": "Leigh-Ann Galloway",
@@ -140,26 +145,35 @@ Response:
   }
 ```
 
-The fifth functionality is to fetch the entire database of the questions answered so far.
-It provides an option to select a specific model and know the details of its activity. In this case the name of model is extracted and activity of that model is returned. That is the question , context and answer along with time stamp of answering is returned. There is also option to select time frame . the start and the end time frame if selected, the API returns the records between that provided window. If there is no start and end time , API returns the records of all the instance wher a model was used to answetr a qyestion.In same way if the model name is not provided in request, the record for all models are returned.
+ <br>
+ The fifth functionality is to fetch the database of questions answered.
+ <br> 
+ We have provided an option to select a specific model in which case the output will only display the Question-Answers used by the specific model. If no model is provided, the output will display the answers for all the models which are there in the database
+ <br>
+ We have also added an option to select the time frame which will help us fetch the question-answers used between the two time frames (UNIX). This is mandatory to fetch the answers.
 
-Route:
+ 
+### Route:
   
+<br>
   GET /answer?model=<model name>&start=<start timestamp>&end=<end timestamp>
-  
+<br>  
 
   
 ## Where the API can be located (the base URL): 
  
- https://answer-api-jlzk3jod5q-uc.a.run.app
+https://assignment2-aqldvq5usa-uc.a.run.app
  
 
   
 ## How to build and run the API locally via Docker or Flask
-The app will locally run thorugh localhost link on port 8080 and can be accessed through postman.All the routes will work as it is there.
+<br>
+ The app will locally run thorugh localhost link on port 8080 and can be accessed through postman. The routes need to be added in the url followed by a '/'
   
 ## Launching the API
-Launching part can easily be done by Flask. We have to import flask then there is code which is mentioned with comments in our code. One very crucial thing that happens during launching is to decide the address of host. We can also host the API in our own local machine. We can also use multiple online service to host.
+<br>
+ APIs can be launched using Flask. Flask is used in the code to launch the host and other 5 routes. 
 
 ## Making the Handlers
-Actually Handlers are the part which facilitates in achieving the goals in API. Every handler has a route or path where request comes and thus handler gets invoke. the second part of Handler is fuction that starts executing once handler gets invoked. So we use a decorator to assign a route to handler. Then we write code to form the fuction wwhich will start once handler receives any request. Here is an illustration:
+ Handlers facilitate the goals in API. Handlers have a route/path which receives the request and the handler has been invoked. 
+ <br>The second function of Handler is to execute the function once Handlers has been invoked.
