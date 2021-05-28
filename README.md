@@ -29,6 +29,7 @@ The First Route (GET /models) helps us to get the list of all the available mode
  ### Route 1 : GET /models
 <br> 
 Response:
+ <br>
 ```
  [
     {
