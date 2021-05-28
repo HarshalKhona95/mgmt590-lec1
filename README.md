@@ -23,14 +23,17 @@ The API used is a Question-Answering API which generates answers for the questio
 <br>
 We have created multiple models and have added the functionality to add or delete models. We can choose any model which has been added in the database to answer the questions
 <br>
-<br>
-The First Route (GET /models) helps us to get the list of all the available models
+
+## Route 1
+ <br>
+ The First Route (GET /models) helps us to get the list of all the available models
 
 ### Route 1 : GET /models
 <br> 
 Response:
 <br>
-```
+ 
+``` 
  [
     {
         "model": "distilbert-base-uncased-distilled-squad",
@@ -45,6 +48,7 @@ Response:
   ]
 ```
 
+ ## Route 2
  <br>
 The second route is used to add a new model to our existing database of models. The model details(model, model-name, tokenixer) of the model is extracted from request.json (Body)  
 
@@ -52,8 +56,8 @@ The second route is used to add a new model to our existing database of models. 
   <br>
 Body (request.json):
 <br>
-```
  
+```
  {
     "name": "bert-tiny",
     "tokenizer": "mrm8488/bert-tiny-5-finetuned-squadv2",
@@ -83,10 +87,15 @@ Response:
     }
   ]
 ```
- <br> 
+
+ ## Route 3
+ <br>
 The third route is to delete models from our dataset. The model name which is to be deleted is extracted from the DELETE request and deletes it from the database
 
- ### Route 3: DELETE /models?model=<model name>
+ ### Route 3: DELETE /models
+ 
+ <br>
+ DELETE /models?model = <model name>
  <br> 
  Example: DELETE /models?model=tiny-bert
  
@@ -107,8 +116,9 @@ Response:
     }
   ]
 ``` 
-<br>
-The fourth route is to answer the questions based on the context provided for the particular question. The post request is used to extract the Question and Context from the body (request.json)
+ ## Route 4
+ 
+ The fourth route is to answer the questions based on the context provided for the particular question. The post request is used to extract the Question and Context from the body (request.json)
 <br>
  We have provided an option for the user to choose any model to answer the particular question. The model will be fetched from our database of models.
 <br>
@@ -116,7 +126,8 @@ The fourth route is to answer the questions based on the context provided for th
 <br>
  Additionally, a time-stamp is also added to maintain the record of all the questions answered in a new database which can be later fetched
 
-### Route 4:   
+### Route 4: POST/answer
+ 
   POST /answer?model=<model name>
   Example: POST/answer
   Example: POST/answer?model=deepset-roberta
@@ -134,8 +145,10 @@ Body (request.json):
   }
  ```
 <br>
+ 
  Response:
 ```
+
  {
     "answer": "Leigh-Ann Galloway",
     "context": "She attended the British drama school East 15 in 2005, and left after winning a high-profile role in the BBC drama Waterloo Road, playing the bully Leigh-Ann Galloway.[6] Since that role, Matthews has continued to act in BBC's Doctors, playing Connie Whitfield; in ITV's The Bill playing drug addict Josie Clarke; and she was back in the BBC soap Doctors in 2009, playing Tansy Flack.",
@@ -144,8 +157,10 @@ Body (request.json):
     "timestamp": 1622161059
   }
 ```
+ 
+ ## Route 5
 
- <br>
+ 
  The fifth functionality is to fetch the database of questions answered.
  <br> 
  We have provided an option to select a specific model in which case the output will only display the Question-Answers used by the specific model. If no model is provided, the output will display the answers for all the models which are there in the database
@@ -153,7 +168,7 @@ Body (request.json):
  We have also added an option to select the time frame which will help us fetch the question-answers used between the two time frames (UNIX). This is mandatory to fetch the answers.
 
  
-### Route:
+### Route 5: GET /answer
   
 <br>
   GET /answer?model=<model name>&start=<start timestamp>&end=<end timestamp>
