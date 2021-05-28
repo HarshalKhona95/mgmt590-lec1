@@ -47,8 +47,9 @@ Body (request.json):
     "model": "mrm8488/bert-tiny-5-finetuned-squadv2"
   }
 ```
-```
+
 Response:
+ ```
   [
     {
         "model": "distilbert-base-uncased-distilled-squad",
@@ -69,13 +70,14 @@ Response:
 ```
   
 The third route is to delete models from our dataset. The model name which is to be deleted is extracted from the DELETE request and deletes it from the database
-Route:   
+### Route:   
   DELETE /models?model=<model name>
   Example: DELETE /models?model=tiny-bert
-  
+ 
 Response:
   After selecting tiny-bert, the model will be deleted from the database  
-  [
+```
+ [
     {
         "model": "distilbert-base-uncased-distilled-squad",
         "name": "distilled-bert",
@@ -87,7 +89,7 @@ Response:
         "tokenizer": "deepset/roberta-base-squad2"
     }
   ]
-  
+ ``` 
 
 The fourth route is to answer the questions based on the context provided for the particular question. The post request is used to extract the Question and Context from the body (request.json)
 We have provided an option for the user to choose any model to answer the particular question. The model will be fetched from our database of models.
