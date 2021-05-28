@@ -80,8 +80,8 @@ Response:
 ```
  <br> 
 The third route is to delete models from our dataset. The model name which is to be deleted is extracted from the DELETE request and deletes it from the database
-#<br>
- ## Route 3: DELETE /models?model=<model name>
+
+ ### Route 3: DELETE /models?model=<model name>
  <br> 
  Example: DELETE /models?model=tiny-bert
  
