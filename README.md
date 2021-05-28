@@ -2,11 +2,17 @@
 
 ## Functionalities of The Code
 
+<br>
 We have created several routes for the question-answer code. These are -
+<br>
 GET /moodels
+<br>
 PUT /models
+<br>
 DELETE /models?model=<model name>
+<br>
 POST /answer?model=<model name>
+<br>
 GET /answer?model=<model name>&start=<start timestamp>&end=<end timestamp>
  
 
