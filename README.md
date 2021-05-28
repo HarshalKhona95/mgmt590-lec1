@@ -15,11 +15,12 @@ The API used is a Question-Answering API which generates answers for the questio
 We have created multiple models and have added the functionality to add or delete models. We can choose any model which has been added in the database to answer the questions
 
 Of the several routes created, the first one (GET /models) helps us to get the list of all the available models
-Route:   
+### Route:   
   GET /models
   
 Response:
-  [
+```
+ [
     {
         "model": "distilbert-base-uncased-distilled-squad",
         "name": "distilled-bert",
@@ -31,19 +32,22 @@ Response:
         "tokenizer": "deepset/roberta-base-squad2"
     }
   ]
-
+```
 
 The second route is used to add a new model to our existing database of models. The model details(model, model-name, tokenixer) of the model is extracted from request.json (Body)  
-Route: 
+
+ ### Route: 
   PUT /models
   
 Body (request.json):
-  {
+```
+ {
     "name": "bert-tiny",
     "tokenizer": "mrm8488/bert-tiny-5-finetuned-squadv2",
     "model": "mrm8488/bert-tiny-5-finetuned-squadv2"
   }
-
+```
+```
 Response:
   [
     {
@@ -62,7 +66,7 @@ Response:
         "tokenizer": "mrm8488/bert-tiny-5-finetuned-squadv2"
     }
   ]
-
+```
   
 The third route is to delete models from our dataset. The model name which is to be deleted is extracted from the DELETE request and deletes it from the database
 Route:   
