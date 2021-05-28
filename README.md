@@ -60,6 +60,7 @@ Body (request.json):
 ```
 
 Response:
+ <br>
  ```
   [
     {
