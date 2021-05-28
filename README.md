@@ -52,7 +52,7 @@ The second route is used to add a new model to our existing database of models. 
   <br>
 Body (request.json):
 <br>
- ```
+```
  {
     "name": "bert-tiny",
     "tokenizer": "mrm8488/bert-tiny-5-finetuned-squadv2",
@@ -104,7 +104,7 @@ Response:
         "tokenizer": "deepset/roberta-base-squad2"
     }
   ]
- ``` 
+``` 
 <br>
 The fourth route is to answer the questions based on the context provided for the particular question. The post request is used to extract the Question and Context from the body (request.json)
 <br>
