@@ -51,7 +51,8 @@ The second route is used to add a new model to our existing database of models. 
  ### Route 2: PUT /models
   <br>
 Body (request.json):
-```
+<br>
+ ```
  {
     "name": "bert-tiny",
     "tokenizer": "mrm8488/bert-tiny-5-finetuned-squadv2",
@@ -61,7 +62,7 @@ Body (request.json):
 
 Response:
  <br>
- ```
+```
   [
     {
         "model": "distilbert-base-uncased-distilled-squad",
