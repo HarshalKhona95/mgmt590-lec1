@@ -26,8 +26,7 @@ We have created multiple models and have added the functionality to add or delet
  <br>
 The First Route (GET /models) helps us to get the list of all the available models
 
- ### Route 1 :   
-  GET /models
+ ### Route 1 : GET /models
 <br> 
 Response:
 ```
@@ -48,9 +47,7 @@ Response:
  <br>
 The second route is used to add a new model to our existing database of models. The model details(model, model-name, tokenixer) of the model is extracted from request.json (Body)  
 
- ### Route 2: 
- <br> 
- PUT /models
+ ### Route 2: PUT /models
   <br>
 Body (request.json):
 ```
@@ -84,9 +81,7 @@ Response:
  <br> 
 The third route is to delete models from our dataset. The model name which is to be deleted is extracted from the DELETE request and deletes it from the database
 #<br>
- ## Route 3:   
- <br> 
- DELETE /models?model=<model name>
+ ## Route 3: DELETE /models?model=<model name>
  <br> 
  Example: DELETE /models?model=tiny-bert
  
