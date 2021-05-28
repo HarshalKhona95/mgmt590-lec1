@@ -18,18 +18,18 @@ GET /answer?model=<model name>&start=<start timestamp>&end=<end timestamp>
  
 
 ## General Information about API
- <br>
+<br>
 The API used is a Question-Answering API which generates answers for the questions from the given context. 
 <br>
 We have created multiple models and have added the functionality to add or delete models. We can choose any model which has been added in the database to answer the questions
 <br>
- <br>
+<br>
 The First Route (GET /models) helps us to get the list of all the available models
 
- ### Route 1 : GET /models
+### Route 1 : GET /models
 <br> 
 Response:
- <br>
+<br>
 ```
  [
     {
