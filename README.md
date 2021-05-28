@@ -5,6 +5,7 @@
 <br>
 We have created several routes for the question-answer code. These are -
 <br>
+<br>
 GET /moodels
 <br>
 PUT /models
@@ -17,13 +18,16 @@ GET /answer?model=<model name>&start=<start timestamp>&end=<end timestamp>
  
 
 ## General Information about API
+ <br>
 The API used is a Question-Answering API which generates answers for the questions from the given context. 
+<br>
 We have created multiple models and have added the functionality to add or delete models. We can choose any model which has been added in the database to answer the questions
-
+<br>
 Of the several routes created, the first one (GET /models) helps us to get the list of all the available models
-### Route 1 :   
+
+ ### Route 1 :   
   GET /models
-  
+<br> 
 Response:
 ```
  [
@@ -40,11 +44,13 @@ Response:
   ]
 ```
 
+ <br>
 The second route is used to add a new model to our existing database of models. The model details(model, model-name, tokenixer) of the model is extracted from request.json (Body)  
 
  ### Route 2: 
-  PUT /models
-  
+ <br> 
+ PUT /models
+  <br>
 Body (request.json):
 ```
  {
@@ -74,14 +80,18 @@ Response:
     }
   ]
 ```
-  
+ <br> 
 The third route is to delete models from our dataset. The model name which is to be deleted is extracted from the DELETE request and deletes it from the database
-### Route 3:   
-  DELETE /models?model=<model name>
-  Example: DELETE /models?model=tiny-bert
+#<br>
+ ## Route 3:   
+ <br> 
+ DELETE /models?model=<model name>
+ <br> 
+ Example: DELETE /models?model=tiny-bert
  
 Response:
-  After selecting tiny-bert, the model will be deleted from the database  
+ <br> 
+ After selecting tiny-bert, the model will be deleted from the database  
 ```
  [
     {
