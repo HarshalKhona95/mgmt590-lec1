@@ -53,11 +53,13 @@ The second route is used to add a new model to our existing database of models. 
 Body (request.json):
 <br>
 ```
+ 
  {
     "name": "bert-tiny",
     "tokenizer": "mrm8488/bert-tiny-5-finetuned-squadv2",
     "model": "mrm8488/bert-tiny-5-finetuned-squadv2"
   }
+ 
 ```
 
 Response:
